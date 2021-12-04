@@ -37,7 +37,7 @@ Lưu tên và điểm người chơi vào biến `name` và `score`. Đọc các
   
 ### 2. Chọn độ khó  
 Lưu vào biến `dif` với các giá trị:
-  * Dế: 1
+  * Dễ: 1
   * TB: 2
   * Khó: 3  
   
