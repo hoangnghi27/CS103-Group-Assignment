@@ -70,7 +70,7 @@ Lưu vào biến `dif` với các giá trị:
     * Khởi tạo các biến:
       * `num_of_revealed = 0`: số kí tự đã mở  
       * `revealing_pos`: vị trí của kí tự vừa mở  
-      * `allowed`: số lần mở kí tự cho phép  
+      * `allowed`: số kí tự cho phép được mở  
       * `banned`: số lần mở kí tự cấm  
       * `round_pnt = PNT`: điểm số có được sau vòng chơi  
       * `time_left`: dùng để đếm ngược thời gian  
@@ -79,8 +79,8 @@ Lưu vào biến `dif` với các giá trị:
   * **B3**:
     * `allowed > 0`: Hỏi người chơi có muốn mở kí tự cho phép không  
       * *Có*:
-        * `allowed--`  
         * `round_pnt -= PNT_A`  
+        * Thực hiện B4 `allowed` lần  
       * *Không*:  Đi tới B7
      * `allowed < 0 && banned > 0`: Hỏi người chơi có muốn mở kí tự cấm không  
        * *Có*:
