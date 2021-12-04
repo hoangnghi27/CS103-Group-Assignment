@@ -96,7 +96,7 @@ Lưu vào biến `dif` với các giá trị:
 ```c
 revealed_pos[num_of_revealed] = số_vừa_chọn;
 num_of_revealed++;
-revealing_pos = revealed_pos[num_of_revealed - 1];
+revealing_pos = số_vừa_chọn;
 revealed[revealing_pos] = key[revealing_pos];
 ```
    * **B5**: Chạy vòng for duyệt qua mảng `revealed`, nếu gặp kí tự `\0` thì in ra `_`, ngoài ra thì in kí tự tương ứng  
