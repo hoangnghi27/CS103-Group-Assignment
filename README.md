@@ -27,7 +27,7 @@ d. Lưu điểm
     * Kiểm tra xem tên vừa nhập có trùng với tên nào trong file điểm không
       * Nếu có thì báo lỗi và yêu cầu nhập lại
       * Nếu không
-        * Khởi tạo file có tên của người chơi
+        * Khởi tạo file dữ liệu của người chơi
         * Cập nhật file scoreboard:
           * Tăng tổng số người chơi
           * Lưu tên người chơi mới với số điểm 50 
@@ -57,7 +57,7 @@ Lưu vào biến `dif` với các giá trị:
     * Sau khi chọn được
       * Lưu vào mảng `used`
       * `num_of_used++`  
-      * Lưu từ khóa vào file người chơi  
+      * Cập nhật file dữ liệu người chơi  
   
 ### 2. Mở từ khóa  
   * **B1**:
