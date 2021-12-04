@@ -147,7 +147,7 @@ revealed[revealing_pos] = key[revealing_pos];
       *  In ra *"Ban vua bi tru di `PNT_W` diem, so diem hien tai cua ban la `score`"*  
   
   * ### `SessionResult()`:
-    * Cập nhật điểm của người chơi vào `UpdateScoreboardData`  
+    * Cập nhật điểm của người chơi bằng `UpdateScoreboardData`  
     * Khởi tạo mảng `scoreboard` và gán các điểm số trong file scoreboard vào mảng này
     * Sắp xếp mảng `scoreboard` tăng dần. Lưu số phần tử của mảng vào biến `num_of_records`
     * Duyệt qua mảng `scoreboard` và xét xem `score` sẽ nằm ở vị trí nào. Lưu vào biến `pos` 
