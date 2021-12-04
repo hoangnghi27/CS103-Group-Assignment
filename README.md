@@ -30,7 +30,7 @@ d. Lưu điểm
         * Khởi tạo file có tên của người chơi
         * Cập nhật file scoreboard:
           * Tăng tổng số người chơi
-          * Lưu tên người chơi mới với số điểm 
+          * Lưu tên người chơi mới với số điểm 50 
   
 Lưu tên và điểm người chơi vào biến `name` và `score`   
   
