@@ -131,7 +131,7 @@ num_of_revealed++;
 revealing_pos = số_vừa_chọn;
 revealed[revealing_pos] = key[revealing_pos];
 ```  
----
+  
   * ### `Timer`: Đồng hồ đếm ngược  
   
   
