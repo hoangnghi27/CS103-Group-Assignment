@@ -81,13 +81,13 @@ Lưu vào biến `dif` với các giá trị:
       * *Có*:
         * `allowed--`  
         * `round_pnt -= PNT_A`  
-      * *Không*:  Qua B7
+      * *Không*:  Đi tới B7
      * `allowed < 0 && banned > 0`: Hỏi người chơi có muốn mở kí tự cấm không  
        * *Có*:
          * `banned--`  
          * `round_pnt -= PNT_B`  
-       * *Không*:  Qua B7
-     * `allowed < 0 && banned < 0`: Qua B7
+       * *Không*:  Đi tới B7
+     * `else`: Đi tới B7
   * **B4**:
     * Clear màn hình. In ra tên, điểm, gợi ý  
     * Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa
@@ -103,7 +103,7 @@ revealed[revealing_pos] = key[revealing_pos];
    * **B5**: Chạy vòng for duyệt qua mảng `revealed`, nếu gặp kí tự `\0` thì in ra `_`, ngoài ra thì in kí tự tương ứng  
    * **B6**:
      * `allowed > 0 || banned > 0`: Quay lại B3
-     * `else`: Qua B7
+     * `else`: Đi tới B7
    * **B7**: In ra "Ban vui long doan trong 10 giay". `time_left = 10`. Mỗi giây giảm 1, khi `== 0` thì qua B8  
    * **B8**: In ra "Ban vui long nhap dap an:". `time_left = 5`.
    * **B9**:
