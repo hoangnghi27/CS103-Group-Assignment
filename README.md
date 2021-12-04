@@ -89,13 +89,13 @@ Lưu vào biến `dif` với các giá trị:
   * Đọc dữ liệu
     * Ngân hàng từ khóa: `ReadEasyKeys`, `ReadMedKeys`, `ReadHardKeys`
     * Scoreboard: `ReadScoreboardData`
-    * Người chơi: `ReadPlayerData`  
-  * Cập nhật dữ liệu (thay `Read` bằng `Update`)  
-  * Tạo file dữ liệu người chơi mới: `CreateNewPlayerData`    
+    * Người chơi: `ReadPlayerData` 
+  * Cập nhật dữ liệu (thay `Read` bằng `Update`) 
+  * Tạo file dữ liệu người chơi mới: `CreateNewPlayerData()`    
   
 
 ## 2. Quản lí dữ liệu trong quá trình chơi
-  * ### `KeyPicker`:
+  * ### `KeyPicker()`:
     * Chọn random một phần tử từ mảng `bank`
     * Duyệt qua mảng `used`, nếu không có từ nào trùng thì dùng, nếu có thì chọn lại  
     * Sau khi chọn được
@@ -103,12 +103,12 @@ Lưu vào biến `dif` với các giá trị:
       * `num_of_used++`  
       * Cập nhật file dữ liệu người chơi  
   
-  * ### `Printer`:
+  * ### `Printer()`:
     * Clear màn hình
     * In ra tên, điểm, gợi ý
     * Chạy vòng for duyệt qua mảng `revealed`, nếu gặp kí tự `\0` thì in ra `_`, ngoài ra thì in kí tự tương ứng
   
-  * ### `AskToReveal`:
+  * ### `AskToReveal()`:
     * `allowed > 0`: Hỏi người chơi có muốn mở kí tự cho phép không  
       * *Có*:
         * `round_pnt -= PNT_A`  
@@ -120,7 +120,7 @@ Lưu vào biến `dif` với các giá trị:
          * `round_pnt -= PNT_B`  
      * `else`: Đi tới B5 
   
-  * ### `Revealer`:
+  * ### `Revealer()`:
     * Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa  
       * Nếu rồi thì chọn lại  
       * Nếu chưa:  
@@ -136,7 +136,7 @@ revealed[revealing_pos] = key[revealing_pos];
   
 ## 3. Thông báo kết quả
 
-  * ### `AnswerResult`:  
+  * ### `AnswerResult()`:  
     * `time_left > 0 && input == key`:
       * `score += round_pnt`
       * In ra *"Dap an cua ban chinh xac. Xin chuc mung ban"* 
@@ -146,8 +146,8 @@ revealed[revealing_pos] = key[revealing_pos];
       * `input != key`: In ra *"Dap an cua ban khong chinh xac, dap dung la ..."* 
       *  In ra *"Ban vua bi tru di `PNT_W` diem, so diem hien tai cua ban la `score`"*  
   
-  * ### `SessionResult`:
-    * Cập nhật điểm của người chơi trong file scoreboard
+  * ### `SessionResult()`:
+    * Cập nhật điểm của người chơi vào `UpdateScoreboardData`  
     * Khởi tạo mảng `scoreboard` và gán các điểm số trong file scoreboard vào mảng này
     * Sắp xếp mảng `scoreboard` tăng dần. Lưu số phần tử của mảng vào biến `num_of_records`
     * Duyệt qua mảng `scoreboard` và xét xem `score` sẽ nằm ở vị trí nào. Lưu vào biến `pos` 
