@@ -26,10 +26,14 @@ d. Lưu điểm
   
 Lưu tên và điểm người chơi vào biến `name` và `score`   
   
+  
 #### 2. Chọn độ khó  
 Lưu vào biến `dif`  
   
+  
 #### 3. Hiện tên và điểm số hiện tại của người chơi  
+  
+  
   
   
 ### b. Chơi
