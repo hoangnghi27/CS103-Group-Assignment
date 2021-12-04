@@ -104,16 +104,16 @@ revealed[revealing_pos] = key[revealing_pos];
    * **B6**:
      * `allowed > 0 || banned > 0`: Quay lại B3
      * `else`: Đi tới B7
-   * **B7**: In ra "Ban vui long doan trong 10 giay". `time_left = 10`. Mỗi giây giảm 1, khi `== 0` thì qua B8  
-   * **B8**: In ra "Ban vui long nhap dap an:". `time_left = 5`.
+   * **B7**: In ra *"Ban vui long doan trong 10 giay"*. `time_left = 10`. Mỗi giây giảm 1, khi `== 0` thì qua B8  
+   * **B8**: In ra *"Ban vui long nhap dap an:"*. `time_left = 5`.
    * **B9**:
      * `time_left > 0 && input == key`:
        * `score += round_pnt`
-       * In ra "Dap an cua ban chinh xac. Xin chuc mung ban"  
-       * In ra "Ban vua duoc cong them `round_pnt` diem, so diem hien tai cua ban la `score`"
+       * In ra *"Dap an cua ban chinh xac. Xin chuc mung ban"* 
+       * In ra *"Ban vua duoc cong them `round_pnt` diem, so diem hien tai cua ban la `score`"*
      * `else`: `score -= PNT_W`
-       * `time_left == 0`: In ra "Rat tiec ban khong doan duoc o chu"
-       * `input != key`: In ra "Dap an cua ban khong chinh xac, dap dung la ..." 
+       * `time_left == 0`: In ra *"Rat tiec ban khong doan duoc o chu"*
+       * `input != key`: In ra *"Dap an cua ban khong chinh xac, dap dung la ..."* 
        *  In ra "Ban vua bi tru di `PNT_W` diem, so diem hien tai cua ban la `score`"
     * **B10**: Hỏi người chơi có muốn tiếp tục
       * *Có*: Clear màn hình. Quay lại **1. B1**
@@ -122,4 +122,4 @@ revealed[revealing_pos] = key[revealing_pos];
         * Khởi tạo mảng `scoreboard` và gán các điểm số trong file scoreboard vào mảng này
         * Sắp xếp mảng `scoreboard` tăng dần. Lưu số phần tử của mảng vào biến `num_of_records`
         * Duyệt qua mảng `scoreboard` và xét xem `score` sẽ nằm ở vị trí nào. Lưu vào biến `pos` 
-        * In ra "Tong diem cua ban la `score`, vi tri cua ban trong bang xep hang: `pos`/'num_of_records'. Chao ban, hen gap ban lan sau!"
+        * In ra *"Tong diem cua ban la `score`, vi tri cua ban trong bang xep hang: `pos`/'num_of_records'. Chao ban, hen gap ban lan sau!"*
