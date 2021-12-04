@@ -50,13 +50,7 @@ Lưu vào biến `dif` với các giá trị:
 ### 1. Chọn từ khóa
   * **B1**: Xác định độ khó dựa trên biến `dif` để truy cập file ngân hàng tương ứng. Lưu các từ khóa của ngân hàng vào mảng `bank`  
   * **B2**: Nếu `num_of_used == kích_thước_ngân_hàng` (kích thước các ngân hàng được lưu vào các hằng số) thì thông báo đã chơi hết và thoát. Nếu nhỏ hơn thì tiếp tục chơi  
-  * **B3**:
-    * Chọn random một phần tử từ mảng `bank`
-    * Duyệt qua mảng `used`, nếu không có từ nào trùng thì dùng, nếu có thì chọn lại  
-    * Sau khi chọn được
-      * Lưu vào mảng `used`
-      * `num_of_used++`  
-      * Cập nhật file dữ liệu người chơi  
+  * **B3**: `KeyPicker()`  
   
 ### 2. Mở từ khóa  
   * **B1**:
@@ -102,6 +96,14 @@ Lưu vào biến `dif` với các giá trị:
 ---
 ---
 ## 2. Quản lí dữ liệu trong quá trình chơi
+  * `KeyPicker`:
+    * Chọn random một phần tử từ mảng `bank`
+    * Duyệt qua mảng `used`, nếu không có từ nào trùng thì dùng, nếu có thì chọn lại  
+    * Sau khi chọn được
+      * Lưu vào mảng `used`
+      * `num_of_used++`  
+      * Cập nhật file dữ liệu người chơi  
+---
   * `Printer`:
     * Clear màn hình
     * In ra tên, điểm, gợi ý
