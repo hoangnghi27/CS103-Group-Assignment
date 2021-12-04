@@ -93,10 +93,9 @@ Lưu vào biến `dif` với các giá trị:
     * Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa
       * Nếu rồi thì chọn lại
       * Nếu chưa:
-        * `revealed_pos[num_of_revealed] = số_vừa_chọn`
-        * `num_of_revealed++`
-    * Gán số vừa chọn vào biến `revealing_pos`
 ```c
+revealed_pos[num_of_revealed] = số_vừa_chọn;
+num_of_revealed++;
 revealing_pos = revealed_pos[num_of_revealed - 1];
 revealed[revealing_pos] = key[revealing_pos];
 ```
