@@ -123,4 +123,4 @@ revealed[revealing_pos] = key[revealing_pos];
       * Duyệt qua mảng `scoreboard` và xét xem `score` sẽ nằm ở vị trí nào. Lưu vào biến `pos` 
       * In ra *"Tong diem cua ban la `score`, vi tri cua ban trong bang xep hang: `pos`/'num_of_records'. Chao ban, hen gap ban lan sau!"*
   
-# Danh sách hàm
+# IV. Danh sách hàm
