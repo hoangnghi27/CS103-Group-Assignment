@@ -69,16 +69,15 @@ Lưu vào biến `dif` với các giá trị:
       * `round_pnt = PNT`: điểm số có được sau vòng chơi  
       * `duration`: dùng để đếm ngược thời gian  
       * `input`: nhận đáp án người dùng nhập vào  
-  * **B2**: `Printer()`
-  * **B3**: `AskToReveal()`    
-  * **B4**: `Revealer()`  
-  * **B5**:
-    * `allowed > 0 || banned > 0`: Quay lại B3
-    * `else`: Đi tới B6
-  * **B6**: In ra *"Ban vui long doan trong 10 giay"*. `duration = 10`, `Timer(duration)`  
-  * **B7**: In ra *"Ban vui long nhap dap an:"*. `duration = 5`, `Timer(duration)`  
-  * **B8**: `AnswerResult`  
-  * **B9**: Hỏi người chơi có muốn tiếp tục
+  * **B2**: `Printer()` + `AskToReveal()`    
+  * **B3**: `Revealer()` + `Printer()`    
+  * **B4**:
+    * `allowed > 0 || banned > 0`: Quay lại B2
+    * `else`: Đi tới B5
+  * **B5**: In ra *"Ban vui long doan trong 10 giay"*. `duration = 10`, `Timer(duration)`  
+  * **B6**: In ra *"Ban vui long nhap dap an:"*. `duration = 5`, `Timer(duration)`  
+  * **B7**: `AnswerResult`  
+  * **B8**: Hỏi người chơi có muốn tiếp tục
     * *Có*: Clear màn hình. Quay lại **1. B1**
     * *Không*: `SessionResult`  
   
@@ -119,7 +118,7 @@ Lưu vào biến `dif` với các giá trị:
        * *Có*:
          * `banned--`  
          * `round_pnt -= PNT_B`  
-     * `else`: Đi tới B6
+     * `else`: Đi tới B5 
   
   * ### `Revealer`:
     * Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa  
