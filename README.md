@@ -73,54 +73,93 @@ Lưu vào biến `dif` với các giá trị:
       * `allowed`: số kí tự cho phép được mở  
       * `banned`: số lần mở kí tự cấm  
       * `round_pnt = PNT`: điểm số có được sau vòng chơi  
-      * `time_left`: dùng để đếm ngược thời gian  
+      * `duration`: dùng để đếm ngược thời gian  
       * `input`: nhận đáp án người dùng nhập vào  
-  * **B2**: Clear màn hình. In ra tên, điểm, gợi ý và các dấu gạch dưới  
-  * **B3**:
+  * **B2**: `Printer()`
+  * **B3**: `AskToReveal()`    
+  * **B4**: `Revealer()`  
+  * **B5**:
+    * `allowed > 0 || banned > 0`: Quay lại B3
+    * `else`: Đi tới B6
+  * **B6**: In ra *"Ban vui long doan trong 10 giay"*. `duration = 10`, `Timer(duration)`  
+  * **B7**: In ra *"Ban vui long nhap dap an:"*. `duration = 5`, `Timer(duration)`  
+  * **B8**: `AnswerResult`  
+  * **B9**: Hỏi người chơi có muốn tiếp tục
+    * *Có*: Clear màn hình. Quay lại **1. B1**
+    * *Không*: `SessionResult`  
+  
+  
+  
+# IV. Danh sách hàm
+  
+## 1. Đọc - Lưu dữ liệu
+  * Đọc dữ liệu
+    * Ngân hàng từ khóa: `ReadEasyKeys`, `ReadMedKeys`, `ReadHardKeys`
+    * Scoreboard: `ReadScoreboardData`
+    * Người chơi: `ReadPlayerData`  
+  * Cập nhật dữ liệu (thay `Read` bằng `Update`)  
+  * Tạo file dữ liệu người chơi mới: `CreateNewPlayerData`    
+---
+---
+## 2. Quản lí dữ liệu trong quá trình chơi
+  * `Printer`:
+    * Clear màn hình
+    * In ra tên, điểm, gợi ý
+    * Chạy vòng for duyệt qua mảng `revealed`, nếu gặp kí tự `\0` thì in ra `_`, ngoài ra thì in kí tự tương ứng
+---
+  * `AskToReveal`:
     * `allowed > 0`: Hỏi người chơi có muốn mở kí tự cho phép không  
       * *Có*:
         * `round_pnt -= PNT_A`  
-        * Thực hiện B4 `allowed` lần  
-      * *Không*:  Đi tới B7
-     * `allowed < 0 && banned > 0`: Hỏi người chơi có muốn mở kí tự cấm không  
+        * Thực hiện `Revealer()` số lần tương ứng với `allowed`  
+        * `allowed = 0`  
+     * `banned > 0`: Hỏi người chơi có muốn mở kí tự cấm không  
        * *Có*:
          * `banned--`  
          * `round_pnt -= PNT_B`  
-       * *Không*:  Đi tới B7
-     * `else`: Đi tới B7
-  * **B4**:
-    * Clear màn hình. In ra tên, điểm, gợi ý  
-    * Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa
-      * Nếu rồi thì chọn lại
-      * Nếu chưa:
+     * `else`: Đi tới B6
+---     
+  * `Revealer`: Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa  
+      * Nếu rồi thì chọn lại  
+      * Nếu chưa:  
 ```c
 revealed_pos[num_of_revealed] = số_vừa_chọn;
 num_of_revealed++;
 revealing_pos = số_vừa_chọn;
 revealed[revealing_pos] = key[revealing_pos];
-```
-   * **B5**: Chạy vòng for duyệt qua mảng `revealed`, nếu gặp kí tự `\0` thì in ra `_`, ngoài ra thì in kí tự tương ứng  
-   * **B6**:
-     * `allowed > 0 || banned > 0`: Quay lại B3
-     * `else`: Đi tới B7
-   * **B7**: In ra *"Ban vui long doan trong 10 giay"*. `time_left = 10`. Mỗi giây giảm 1, khi `== 0` thì qua B8  
-   * **B8**: In ra *"Ban vui long nhap dap an:"*. `time_left = 5`.
-   * **B9**:
-     * `time_left > 0 && input == key`:
-       * `score += round_pnt`
-       * In ra *"Dap an cua ban chinh xac. Xin chuc mung ban"* 
-       * In ra *"Ban vua duoc cong them `round_pnt` diem, so diem hien tai cua ban la `score`"*
-     * `else`: `score -= PNT_W`
-       * `time_left == 0`: In ra *"Rat tiec ban khong doan duoc o chu"*
-       * `input != key`: In ra *"Dap an cua ban khong chinh xac, dap dung la ..."* 
-       *  In ra *"Ban vua bi tru di `PNT_W` diem, so diem hien tai cua ban la `score`"*  
-  * **B10**: Hỏi người chơi có muốn tiếp tục
-    * *Có*: Clear màn hình. Quay lại **1. B1**
-    * *Không*:
-      * Cập nhật điểm của người chơi trong file scoreboard
-      * Khởi tạo mảng `scoreboard` và gán các điểm số trong file scoreboard vào mảng này
-      * Sắp xếp mảng `scoreboard` tăng dần. Lưu số phần tử của mảng vào biến `num_of_records`
-      * Duyệt qua mảng `scoreboard` và xét xem `score` sẽ nằm ở vị trí nào. Lưu vào biến `pos` 
-      * In ra *"Tong diem cua ban la `score`, vi tri cua ban trong bang xep hang: `pos`/'num_of_records'. Chao ban, hen gap ban lan sau!"*
-  
-# IV. Danh sách hàm
+```  
+---
+  * `Timer`: Đồng hồ đếm ngược  
+---
+---
+## 3. Thông báo kết quả
+
+  * `AnswerResult`:  
+    * `time_left > 0 && input == key`:
+      * `score += round_pnt`
+      * In ra *"Dap an cua ban chinh xac. Xin chuc mung ban"* 
+      * In ra *"Ban vua duoc cong them `round_pnt` diem, so diem hien tai cua ban la `score`"*
+    * `else`: `score -= PNT_W`
+      * `time_left == 0`: In ra *"Rat tiec ban khong doan duoc o chu"*
+      * `input != key`: In ra *"Dap an cua ban khong chinh xac, dap dung la ..."* 
+      *  In ra *"Ban vua bi tru di `PNT_W` diem, so diem hien tai cua ban la `score`"*  
+---
+  * `SessionResult`:
+    * Cập nhật điểm của người chơi trong file scoreboard
+    * Khởi tạo mảng `scoreboard` và gán các điểm số trong file scoreboard vào mảng này
+    * Sắp xếp mảng `scoreboard` tăng dần. Lưu số phần tử của mảng vào biến `num_of_records`
+    * Duyệt qua mảng `scoreboard` và xét xem `score` sẽ nằm ở vị trí nào. Lưu vào biến `pos` 
+    * In ra *"Tong diem cua ban la `score`, vi tri cua ban trong bang xep hang: `pos`/`num_of_records`. Chao ban, hen gap ban lan sau!"*  
+
+
+
+
+
+
+
+
+
+
+
+
+
