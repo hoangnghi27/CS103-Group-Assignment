@@ -93,23 +93,23 @@ Lưu vào biến `dif` với các giá trị:
     * Người chơi: `ReadPlayerData`  
   * Cập nhật dữ liệu (thay `Read` bằng `Update`)  
   * Tạo file dữ liệu người chơi mới: `CreateNewPlayerData`    
----
----
+  
+
 ## 2. Quản lí dữ liệu trong quá trình chơi
-  * `KeyPicker`:
+  * ### `KeyPicker`:
     * Chọn random một phần tử từ mảng `bank`
     * Duyệt qua mảng `used`, nếu không có từ nào trùng thì dùng, nếu có thì chọn lại  
     * Sau khi chọn được
       * Lưu vào mảng `used`
       * `num_of_used++`  
       * Cập nhật file dữ liệu người chơi  
----
-  * `Printer`:
+  
+  * ### `Printer`:
     * Clear màn hình
     * In ra tên, điểm, gợi ý
     * Chạy vòng for duyệt qua mảng `revealed`, nếu gặp kí tự `\0` thì in ra `_`, ngoài ra thì in kí tự tương ứng
----
-  * `AskToReveal`:
+  
+  * ### `AskToReveal`:
     * `allowed > 0`: Hỏi người chơi có muốn mở kí tự cho phép không  
       * *Có*:
         * `round_pnt -= PNT_A`  
@@ -120,8 +120,9 @@ Lưu vào biến `dif` với các giá trị:
          * `banned--`  
          * `round_pnt -= PNT_B`  
      * `else`: Đi tới B6
----     
-  * `Revealer`: Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa  
+  
+  * ### `Revealer`:
+    * Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa  
       * Nếu rồi thì chọn lại  
       * Nếu chưa:  
 ```c
@@ -131,12 +132,12 @@ revealing_pos = số_vừa_chọn;
 revealed[revealing_pos] = key[revealing_pos];
 ```  
 ---
-  * `Timer`: Đồng hồ đếm ngược  
----
----
+  * ### `Timer`: Đồng hồ đếm ngược  
+  
+  
 ## 3. Thông báo kết quả
 
-  * `AnswerResult`:  
+  * ### `AnswerResult`:  
     * `time_left > 0 && input == key`:
       * `score += round_pnt`
       * In ra *"Dap an cua ban chinh xac. Xin chuc mung ban"* 
@@ -145,8 +146,8 @@ revealed[revealing_pos] = key[revealing_pos];
       * `time_left == 0`: In ra *"Rat tiec ban khong doan duoc o chu"*
       * `input != key`: In ra *"Dap an cua ban khong chinh xac, dap dung la ..."* 
       *  In ra *"Ban vua bi tru di `PNT_W` diem, so diem hien tai cua ban la `score`"*  
----
-  * `SessionResult`:
+  
+  * ### `SessionResult`:
     * Cập nhật điểm của người chơi trong file scoreboard
     * Khởi tạo mảng `scoreboard` và gán các điểm số trong file scoreboard vào mảng này
     * Sắp xếp mảng `scoreboard` tăng dần. Lưu số phần tử của mảng vào biến `num_of_records`
