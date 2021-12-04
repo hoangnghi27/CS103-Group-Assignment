@@ -69,8 +69,8 @@ Lưu vào biến `dif` với các giá trị:
       * `round_pnt = PNT`: điểm số có được sau vòng chơi  
       * `duration`: dùng để đếm ngược thời gian  
       * `input`: nhận đáp án người dùng nhập vào  
-  * **B2**: `Printer()` + `AskToReveal()`    
-  * **B3**: `Revealer()` + `Printer()`    
+  * **B2**: `Printer()` \> `AskToReveal()`    
+  * **B3**: `Revealer()` \> `Printer()`    
   * **B4**:
     * `allowed > 0 || banned > 0`: Quay lại B2
     * `else`: Đi tới B5
