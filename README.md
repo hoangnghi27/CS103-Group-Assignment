@@ -52,7 +52,7 @@ Lưu vào biến `dif` với các giá trị:
   * **B2**: Nếu `num_of_used == kích_thước_ngân_hàng` (kích thước các ngân hàng được lưu vào các hằng số) thì thông báo đã chơi hết và thoát. Nếu nhỏ hơn thì tiếp tục chơi  
   * **B3**:
     * Chọn random một phần tử từ mảng `bank`
-    * Duyệt qua mảng used, nếu không có từ nào trùng thì dùng, nếu có thì chọn lại  
+    * Duyệt qua mảng `used`, nếu không có từ nào trùng thì dùng, nếu có thì chọn lại  
     * Sau khi chọn được
       * Lưu vào mảng `used`
       * `num_of_used++`  
