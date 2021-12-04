@@ -114,12 +114,12 @@ revealed[revealing_pos] = key[revealing_pos];
      * `else`: `score -= PNT_W`
        * `time_left == 0`: In ra *"Rat tiec ban khong doan duoc o chu"*
        * `input != key`: In ra *"Dap an cua ban khong chinh xac, dap dung la ..."* 
-       *  In ra "Ban vua bi tru di `PNT_W` diem, so diem hien tai cua ban la `score`"
-    * **B10**: Hỏi người chơi có muốn tiếp tục
-      * *Có*: Clear màn hình. Quay lại **1. B1**
-      * *Không*:
-        * Cập nhật điểm của người chơi trong file scoreboard
-        * Khởi tạo mảng `scoreboard` và gán các điểm số trong file scoreboard vào mảng này
-        * Sắp xếp mảng `scoreboard` tăng dần. Lưu số phần tử của mảng vào biến `num_of_records`
-        * Duyệt qua mảng `scoreboard` và xét xem `score` sẽ nằm ở vị trí nào. Lưu vào biến `pos` 
-        * In ra *"Tong diem cua ban la `score`, vi tri cua ban trong bang xep hang: `pos`/'num_of_records'. Chao ban, hen gap ban lan sau!"*
+       *  In ra *"Ban vua bi tru di `PNT_W` diem, so diem hien tai cua ban la `score`"*  
+  * **B10**: Hỏi người chơi có muốn tiếp tục
+    * *Có*: Clear màn hình. Quay lại **1. B1**
+    * *Không*:
+      * Cập nhật điểm của người chơi trong file scoreboard
+      * Khởi tạo mảng `scoreboard` và gán các điểm số trong file scoreboard vào mảng này
+      * Sắp xếp mảng `scoreboard` tăng dần. Lưu số phần tử của mảng vào biến `num_of_records`
+      * Duyệt qua mảng `scoreboard` và xét xem `score` sẽ nằm ở vị trí nào. Lưu vào biến `pos` 
+      * In ra *"Tong diem cua ban la `score`, vi tri cua ban trong bang xep hang: `pos`/'num_of_records'. Chao ban, hen gap ban lan sau!"*
