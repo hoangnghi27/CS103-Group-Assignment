@@ -32,7 +32,7 @@ d. Lưu điểm
           * Tăng tổng số người chơi
           * Lưu tên người chơi mới với số điểm 50 
   
-Lưu tên và điểm người chơi vào biến `name` và `score`   
+Lưu tên và điểm người chơi vào biến `name` và `score`. Đọc các từ khóa đã được chơi và lưu vào mảng `used_1`, `used_2`, `used_3` (tương ứng với từng độ khó). Lưu số lượng từ đã chơi vào biến `num_of_used_1`, `num_of_used_2`, `num_of_used_3`.    
   
   
 ### 2. Chọn độ khó  
@@ -49,9 +49,8 @@ Lưu vào biến `dif` với các giá trị:
 ## b. Chơi
 ### 1. Chọn từ khóa
   * **B1**: Xác định độ khó dựa trên biến `dif` để truy cập file ngân hàng tương ứng. Lưu các từ khóa của ngân hàng vào mảng `bank`  
-  * **B2**: Đọc các từ khóa đã được chơi và lưu vào mảng `used_1`, `used_2`, `used_3` (tương ứng với từng độ khó). Lưu số lượng từ đã chơi vào biến `num_of_used_1`, `num_of_used_2`, `num_of_used_3`.  
-  * **B3**: Nếu `num_of_used == kích_thước_ngân_hàng` (kích thước các ngân hàng được lưu vào các hằng số) thì thông báo đã chơi hết và thoát. Nếu nhỏ hơn thì tiếp tục chơi  
-  * **B4**:
+  * **B2**: Nếu `num_of_used == kích_thước_ngân_hàng` (kích thước các ngân hàng được lưu vào các hằng số) thì thông báo đã chơi hết và thoát. Nếu nhỏ hơn thì tiếp tục chơi  
+  * **B3**:
     * Chọn random một phần tử từ mảng `bank`
     * Duyệt qua mảng used, nếu không có từ nào trùng thì dùng, nếu có thì chọn lại  
     * Sau khi chọn được
@@ -91,12 +90,16 @@ Lưu vào biến `dif` với các giá trị:
      * `allowed < 0 && banned < 0`: Qua B7
   * **B4**:
     * Clear màn hình. In ra tên, điểm, gợi ý  
-    * Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa. Nếu chưa thì lưu vào vị trí `num_of_revealed` và tăng biến đó lên 1 đơn vị. Nếu rồi thì chọn lại
-    * Gán số vừa chọn vào biến `revealing_pos` và gán giá trị tại vị trí đó trong mảng `key` vào vị trí tương ứng trong mảng `revealed`:
- ```c
- revealing_pos = revealed_pos[num_of_revealed - 1];
- revealed[revealing_pos] = key[revealing_pos];
- ```
+    * Chọn ngẫu nhiên một số từ `0` đến `key_len - 1`. Duyệt qua mảng `revealed_pos` xem số đó đã được chọn chưa
+      * Nếu rồi thì chọn lại
+      * Nếu chưa:
+        * `revealed_pos[num_of_revealed] = số_vừa_chọn`
+        * `num_of_revealed++`
+    * Gán số vừa chọn vào biến `revealing_pos`
+```c
+revealing_pos = revealed_pos[num_of_revealed - 1];
+revealed[revealing_pos] = key[revealing_pos];
+```
    * **B5**: Chạy vòng for duyệt qua mảng `revealed`, nếu gặp kí tự `\0` thì in ra `_`, ngoài ra thì in kí tự tương ứng  
    * **B6**:
      * `allowed > 0 || banned > 0`: Quay lại B3
