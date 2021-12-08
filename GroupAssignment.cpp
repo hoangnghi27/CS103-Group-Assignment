@@ -6,6 +6,8 @@
 #include <cstring>
 #include <windows.h>
 
+//
+
 using namespace std;
 
 #define MAX_SIZE 200
