@@ -1,0 +1,21 @@
+10
+GAUTRUC
+Day la ten 1 loai dong vat chi co hai mau trang va den
+XEDAP
+Day la mot phuong tien giao thong than thien voi moi truong
+BACNINH
+Ten tinh thanh co dien tich nho nhat Viet Nam
+BANHMI
+Day la ten mot mon an noi tieng o Viet Nam
+TULANH
+Day la mot do vat dung de lam lanh thuc an, nuoc uong
+HOAMAI
+Day la ten cua mot loai hoa thuong no vao mua xuan o mien Nam Viet Nam
+BONGDA
+Day la mon the thao duoc menh danh la "mon the thao vua"
+CHIMEN
+Day la mot loai chim duoc nhac den trong doan trich “Canh ngay xuan” tu tac pham “Truyen Kieu”
+SONG
+Day la ten pham van hoc trong ki thi tot nghiep quoc gia nam 2021
+TAMCAM
+Day la ten mot cau chuyen dan gian noi tieng o Viet Nam
