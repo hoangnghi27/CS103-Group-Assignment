@@ -8,27 +8,21 @@
 
 using namespace std;
 
-#define MAX_SIZE 200
-
 
 ofstream writer;
 ifstream reader;
 
 string working_path()
 {
-    char temp[256];
+    char temp[261];
     return (_getcwd(temp, sizeof(temp)) ? string(temp) : string(""));
 }
-
-
-typedef string STR_ARR[MAX_SIZE];
-typedef int INT_ARR[MAX_SIZE];
 
 struct BANK
 {
     int size = 0;
-    STR_ARR keys;
-    STR_ARR hints;
+    string keys[10];
+    string hints[10];
 };
 
 struct PLAYER
@@ -41,8 +35,8 @@ struct PLAYER
 
 struct PLAYER_LIST
 {
-    PLAYER players[MAX_SIZE];
-    int size;
+    PLAYER players[50];
+    int size = 0;
 };
 
 string dir_bank_e = working_path() + "\\saves\\banks\\de.txt",               // File câu hỏi mức độ dễ
@@ -79,15 +73,16 @@ BANK bank_e, bank_m, bank_h,                                // Ngân hàng từ 
 PLAYER_LIST scrbrd;                                         // Scoreboard
 
 PLAYER player;                                              // Người chơi
+string played[10];                                             // Các từ khóa đã chơi của độ khó đã chọn
 
-STR_ARR revealed;                                           // Các kí tự đã được mở
+string revealed[30];                                           // Các kí tự đã được mở
 
-INT_ARR revealed_pos;                                       // Các vị trí đã được mở
+int revealed_pos[30];                                       // Các vị trí đã được mở
 
 
 void ReadKeys(), ReadScrbrdData(), ReadPlayerData(string, PLAYER &),
      UpdateScrbrdData(), UpdatePlayerData(string),
-     CreateNewPlayerData(string), AddNewPlayer(PLAYER),
+     CreateNewPlayerDataFile(string), AddNewPlayer(PLAYER),
      AddPlayerToScrbrd(PLAYER), PrintScrbrd(bool), SortScrbrd(char),
     
      KeyPicker(), Printer(), Timer(),
@@ -105,13 +100,12 @@ int main()
     cout << endl << "=============================================================";
     cout << endl << "|| CHAO MUNG BAN DEN VOI GAME MYWORDS (BY ITEC DEVELOPERS) ||";
     cout << endl << "=============================================================";
-    cout << endl << endl << "Co " << bank_e.size << " o chu De, " << bank_m.size << " o chu Trung binh, " << bank_h.size << " o chu Kho da duoc load";
+    cout << endl << "Co " << bank_e.size << " o chu De, " << bank_m.size << " o chu Trung binh, " << bank_h.size << " o chu Kho da duoc load";
     
 
 
     if (scrbrd.size == 0)
     {
-        cin.clear(); cin.ignore();
         cout << endl << endl << "Vui long nhap ten cua ban: ";
         getline(cin, player.name);
 
@@ -137,7 +131,7 @@ int main()
             int id;
 
             cout << endl << "===== Danh sach nguoi choi da luu =====" << endl;
-            PrintScrbrd(false);
+            PrintScrbrd(true);
 
             cout << endl << endl << "Nhap so thu tu cua ban: ";
             cin >> id;
@@ -149,6 +143,7 @@ int main()
             }
 
             ReadPlayerData(scrbrd.players[id - 1].name, player);
+            UpdateScrbrdData();
             cout << "Da doc du lieu cua nguoi choi " << player.name << endl;
         }
 
@@ -158,12 +153,15 @@ int main()
             cout << endl << endl << "Vui long nhap ten cua ban: ";
             getline(cin, player.name);
 
+            bool existed = false;
             int cur_scrbrd_size = scrbrd.size;
 
             for (int i = 0; i < cur_scrbrd_size; i++)
             {
                 if (scrbrd.players[i].name == player.name)
                 {
+                    existed = true;
+
                     cout << endl << "Ten nguoi choi da co trong Scoreboard. Ban co muon tao moi? (Y/N): ";
                     cin >> option;
 
@@ -175,16 +173,13 @@ int main()
 
                     if (option == "y" || option == "Y")
                     {
-                        string del_dir_s = dir_players_folder + player.name;
-                        char del_dir[200];
-                        strcpy_s(del_dir, (del_dir_s).c_str());
+                        PLAYER temp;
+                        temp.name = player.name;
+                        player = temp;
 
-                        remove(del_dir);
+                        scrbrd.size -= 1;
 
-                        CreateNewPlayerData(player.name);
-                        ReadPlayerData(player.name, player);
-                        scrbrd.players[i] = player;
-                        UpdateScrbrdData();
+                        AddNewPlayer(player);
 
                         cout << "Da luu moi du lieu cua nguoi choi " << player.name << endl;
                     }
@@ -192,17 +187,20 @@ int main()
                     else
                     {
                         ReadPlayerData(player.name, player);
+                        UpdateScrbrdData();
 
                         cout << "Da doc du lieu cua nguoi choi " << player.name << endl;
                     }
-                }
 
-                else
-                {
-                    AddNewPlayer(player);
-
-                    cout << "Da luu du lieu cua nguoi choi " << player.name << endl;
+                    break;
                 }
+            }
+
+            if (existed == false)
+            {
+                AddNewPlayer(player);
+
+                cout << "Da luu du lieu cua nguoi choi " << player.name << endl;
             }
         }
     }
@@ -214,6 +212,33 @@ int main()
     {
         cout << "Khong hop le. Vui long nhap lai: ";
         cin >> dif;
+    }
+
+    switch (dif)
+    {
+        case 1:
+        {
+            for (int i = 0; i < player.played_e.size; i++)
+                played[i] = player.played_e.keys[i];
+            
+            break;
+        }
+
+        case 2:
+        {
+            for (int i = 0; i < player.played_m.size; i++)
+                played[i] = player.played_m.keys[i];
+
+            break;
+        }
+
+        case 3:
+        {
+            for (int i = 0; i < player.played_h.size; i++)
+                played[i] = player.played_h.keys[i];
+
+            break;
+        }
     }
 
     cout << endl;
@@ -342,7 +367,6 @@ void ReadKeys()
         scrbrd.size = -1;
 }
 
-
 void ReadScrbrdData()
 {
     reader.open(dir_scrbrd);
@@ -384,7 +408,6 @@ void ReadScrbrdData()
     else
         scrbrd.size = -1;
 }
-
 
 void ReadPlayerData(string name, PLAYER &target)
 {
@@ -459,7 +482,7 @@ void ReadPlayerData(string name, PLAYER &target)
 
 void UpdateScrbrdData()
 {
-    //SortScrbrd('i');
+    SortScrbrd('d');
 
 
     writer.open(dir_scrbrd);
@@ -471,7 +494,6 @@ void UpdateScrbrdData()
 
     writer.close();
 }
-
 
 void UpdatePlayerData(string name)
 {
@@ -500,7 +522,7 @@ void UpdatePlayerData(string name)
 }
 
 
-void CreateNewPlayerData(string name)
+void CreateNewPlayerDataFile(string name)
 {
     string new_dir = dir_players_folder + name + ".txt";
 
@@ -512,13 +534,17 @@ void CreateNewPlayerData(string name)
     UpdatePlayerData(new_player.name);
 }
 
-
 void AddNewPlayer(PLAYER player)
 {
-    CreateNewPlayerData(player.name);
-    ReadPlayerData(player.name, player);
+    CreateNewPlayerDataFile(player.name);
     AddPlayerToScrbrd(player);
     UpdateScrbrdData();
+}
+
+void AddPlayerToScrbrd(PLAYER player)
+{
+    scrbrd.players[scrbrd.size] = player;
+    scrbrd.size += 1;
 }
 
 
@@ -531,39 +557,28 @@ void PrintScrbrd(bool with_scr)
         cout << endl << i + 1 << ". " << scrbrd.players[i].name;
 
         if (with_scr)
-            cout << endl << scrbrd.players[i].score << " diem" << endl;
+            cout << "\t\t\t" << scrbrd.players[i].score << " diem" << endl;
     }
 }
 
-
 void SortScrbrd(char mode)
 {
-    ReadScrbrdData();
-
-    int cur_pos = 0;
-
-    PLAYER_LIST sorted;
-
-    sorted.size = scrbrd.size;
-    sorted.size = scrbrd.size;
-
-    for (int i = 0; i < sorted.size; i++)
-        sorted.players[i] = scrbrd.players[i];
+    PLAYER temp;
 
     switch (mode)
     {
         case 'i':                                                       // Increment
         {
-            for (int i = 0; i < (sorted.size - 1); i++)
+            for (int i = 0; i < (scrbrd.size - 1); i++)
             {
-                for (int j = i+1; j < sorted.size; j++)
+                for (int j = i + 1; j < scrbrd.size; j++)
                 {
-                    if (sorted.players[j].score > sorted.players[j + 1].score)
+                    if (scrbrd.players[j].score > scrbrd.players[j + 1].score)
                     {
-                        PLAYER temp = sorted.players[j];
+                        temp = scrbrd.players[j];
 
-                        sorted.players[j] = sorted.players[j + 1];
-                        sorted.players[j + 1] = temp;
+                        scrbrd.players[j] = scrbrd.players[j + 1];
+                        scrbrd.players[j + 1] = temp;
                     }
                 }
             }
@@ -573,16 +588,16 @@ void SortScrbrd(char mode)
 
         case 'd':                                                       // Decrement
         {
-            for (int i = 0; i < (sorted.size - 1); i++)
+            for (int i = 0; i < (scrbrd.size - 1); i++)
             {
-                for (int j = i + 1; j < sorted.size; j++)
+                for (int j = i + 1; j < scrbrd.size; j++)
                 {
-                    if (sorted.players[i].score < sorted.players[j].score)
+                    if (scrbrd.players[i].score < scrbrd.players[j].score)
                     {
-                        PLAYER temp = sorted.players[i];
+                        temp = scrbrd.players[i];
 
-                        sorted.players[i] = sorted.players[j];
-                        sorted.players[j] = temp;
+                        scrbrd.players[i] = scrbrd.players[j];
+                        scrbrd.players[j] = temp;
                     }
                 }
             }
@@ -590,18 +605,11 @@ void SortScrbrd(char mode)
             break;
         }
     }
-
-
-    for (int i = 0; i < sorted.size; i++)
-        scrbrd.players[i] = sorted.players[i];
 }
 
 
-void AddPlayerToScrbrd(PLAYER player)
-{
-    scrbrd.players[scrbrd.size] = player;
-    scrbrd.size++;
-}
+
+
 
 void KeyPicker()
 {
