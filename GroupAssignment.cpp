@@ -204,7 +204,7 @@ int main()
     cout << endl << "Chon do kho (1: De   2: Trung binh   3: Kho): ";
     cin >> dif;
 
-    while (dif < 1 && 3 < dif)
+    while (dif < 1 || 3 < dif)
     {
         cout << "Khong hop le. Vui long nhap lai: ";
         cin >> dif;
@@ -386,6 +386,12 @@ void ReadPlayerData(string name, PLAYER &target)
 
     string dir = dir_players_folder + name + ".txt";
 
+    for (int i = 0; i < scrbrd.size; i++)
+    {
+        if (scrbrd.players[i].name == name)
+            target.score = scrbrd.players[i].score;
+    }
+
 
     reader.open(dir);
 
@@ -504,6 +510,7 @@ void UpdatePlayerData(string name)
 
 void UpdateSessionVars()
 {
+    name = player.name;
     score = player.score;
 
 
