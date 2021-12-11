@@ -1,21 +1,21 @@
 10
 NONBAOHIEM
-Day la mot do vat dung de bao ve nguoi tham gia giao thong.
+Day la mot do vat dung de bao ve nguoi tham gia giao thong
 CHIMCANHCUT
-Day la mot loai chim co the boi nhung khong the bay.
+Day la mot loai chim co the boi nhung khong the bay
 KINHVIENVONG
-Day la do vat giup con nguoi nhin duoc nhung thu o rat xa.
+Day la do vat giup con nguoi nhin duoc nhung thu o rat xa
 VACHLATIMSAU
 Day la mot thanh ngu lien quan den bo phan quang hop cua thuc vat va con trung, the hien viec co tim cho ra cai xau de ha gia tri
 NGUYENKIMTHANH
-Day la ten that cua tac gia bai tho “Viet Bac”.
+Day la ten that cua tac gia bai tho “Viet Bac”
 DAITAYDUONG
-Day la ten vung bien o giua Chau Phi va Chau My.
+Day la ten vung bien o giua Chau Phi va Chau My
 THAIBINHDUONG
-Day la ten vung bien rong nhat the gioi.
+Day la ten vung bien rong nhat the gioi
 COBEBANDIEM
-Day la mot cau truyen co tich noi tieng cua nha van Hans Christian Andersen.
+Day la mot cau truyen co tich noi tieng cua nha van Hans Christian Andersen
 DINHDOCLAP
-Day tung la noi lam viec cua Tong Thong Viet Nam Cong Hoa.
+Day tung la noi lam viec cua Tong Thong Viet Nam Cong Hoa
 VANSUNHUY
-Day la mot dieu ma dau nam moi ai cung mong muon.
+Day la mot dieu ma dau nam moi ai cung mong muon
