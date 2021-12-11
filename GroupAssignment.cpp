@@ -35,8 +35,8 @@ struct PLAYER
 
 struct PLAYER_LIST
 {
-    PLAYER players[50];
     int size = 0;
+    PLAYER players[50];
 };
 
 string dir_bank_e = working_path() + "\\saves\\banks\\de.txt",               // File câu hỏi mức độ dễ
@@ -47,14 +47,11 @@ string dir_bank_e = working_path() + "\\saves\\banks\\de.txt",               // 
 
        name,                                                // Tên người chơi
        key,                                                 // Từ khóa được chọn
-       input;                                               // Kết quả của người chơi
+       input;                                               // Kết quả người chơi nhập vào
 
 int score,                                                  // Tổng điểm
     round_pnt,                                              // Số điểm có được sau vòng chơi
     dif,                                                    // Độ khó (1: Easy    2: Medium    3: Hard)
-    
-    key_len,                                                // Số chữ cái của từ khóa
-    num_of_used_1, num_of_used_2, num_of_used_3,            // Sô từ khóa đã sử dụng
 
     PNT,                                                    // Điểm nếu đoán đúng và không lật
     PNT_A,                                                  // Điểm bị trừ khi lật các kí tự cho phép
@@ -64,24 +61,23 @@ int score,                                                  // Tổng điểm
     num_of_revealed = 0,                                    // Số chữ cái đã được mở
     revealing_pos,                                          // Vị trí vừa được mở
     allowed,                                                // Số kí tự cho phép được mở
-    banned,                                                 // Số lần mở kí tự cấm
+    banned,                                                 // Số kí tự cấm được phép mở
+    used_banned = 0,                                        // Số lần mở kí tự cấm
     duration;                                               // Dùng cho Timer()
 
-BANK bank_e, bank_m, bank_h,                                // Ngân hàng từ khóa
-     used_e, used_m, used_h;                                // Các từ khóa đã chơi
+BANK bank_e, bank_m, bank_h;                                // Ngân hàng từ khóa
 
 PLAYER_LIST scrbrd;                                         // Scoreboard
 
 PLAYER player;                                              // Người chơi
-string played[10];                                             // Các từ khóa đã chơi của độ khó đã chọn
+BANK played;                                                // Các từ khóa đã chơi của độ khó đã chọn
 
-string revealed[30];                                           // Các kí tự đã được mở
-
+string revealed[30];                                        // Các kí tự đã được mở
 int revealed_pos[30];                                       // Các vị trí đã được mở
 
 
 void ReadKeys(), ReadScrbrdData(), ReadPlayerData(string, PLAYER &),
-     UpdateScrbrdData(), UpdatePlayerData(string),
+     UpdateScrbrdData(), UpdatePlayerData(string), UpdateSessionVars(),
      CreateNewPlayerDataFile(string), AddNewPlayer(PLAYER),
      AddPlayerToScrbrd(PLAYER), PrintScrbrd(bool), SortScrbrd(char),
     
@@ -106,7 +102,7 @@ int main()
 
     if (scrbrd.size == 0)
     {
-        cout << endl << endl << "Vui long nhap ten cua ban: ";
+        cout << endl << endl << "Vui long nhap ten cua ban (co phan biet hoa/thuong): ";
         getline(cin, player.name);
 
         AddNewPlayer(player);
@@ -150,7 +146,7 @@ int main()
         else
         {
             cin.clear(); cin.ignore();
-            cout << endl << endl << "Vui long nhap ten cua ban: ";
+            cout << endl << endl << "Vui long nhap ten cua ban (co phan biet hoa/thuong): ";
             getline(cin, player.name);
 
             bool existed = false;
@@ -214,32 +210,7 @@ int main()
         cin >> dif;
     }
 
-    switch (dif)
-    {
-        case 1:
-        {
-            for (int i = 0; i < player.played_e.size; i++)
-                played[i] = player.played_e.keys[i];
-            
-            break;
-        }
-
-        case 2:
-        {
-            for (int i = 0; i < player.played_m.size; i++)
-                played[i] = player.played_m.keys[i];
-
-            break;
-        }
-
-        case 3:
-        {
-            for (int i = 0; i < player.played_h.size; i++)
-                played[i] = player.played_h.keys[i];
-
-            break;
-        }
-    }
+    UpdateSessionVars();
 
     cout << endl;
 
@@ -433,11 +404,15 @@ void ReadPlayerData(string name, PLAYER &target)
 
             else if (counter == 1)
             {
-                for (; elem_counter < target.played_e.size; elem_counter++)
-                    target.played_e.keys[elem_counter] = content;
+                target.played_e.keys[elem_counter] = content;
 
-                counter++;
-                elem_counter = 0;
+                if (elem_counter == target.played_e.size - 1)
+                {
+                    counter++;
+                    elem_counter = 0;
+                }
+
+                else elem_counter++;
             }
 
 
@@ -449,11 +424,15 @@ void ReadPlayerData(string name, PLAYER &target)
 
             else if (counter == 3)
             {
-                for (; elem_counter < target.played_m.size; elem_counter++)
-                    target.played_m.keys[elem_counter] = content;
+                target.played_m.keys[elem_counter] = content;
 
-                counter++;
-                elem_counter = 0;
+                if (elem_counter == target.played_m.size - 1)
+                {
+                    counter++;
+                    elem_counter = 0;
+                }
+
+                else elem_counter++;
             }
 
 
@@ -465,10 +444,12 @@ void ReadPlayerData(string name, PLAYER &target)
 
             else if (counter == 5)
             {
-                for (; elem_counter < target.played_h.size; elem_counter++)
-                    target.played_h.keys[elem_counter] = content;
+                target.played_h.keys[elem_counter] = content;
 
-                break;
+                if (elem_counter == target.played_h.size - 1)
+                    break;
+
+                else elem_counter++;
             }
         }
 
@@ -519,6 +500,60 @@ void UpdatePlayerData(string name)
 
 
     writer.close();
+}
+
+void UpdateSessionVars()
+{
+    score = player.score;
+
+
+    switch (dif)
+    {
+        case 1:
+        {
+            allowed = 1;
+            banned = 1;
+            PNT = 10;
+            PNT_A = 5;
+            PNT_B = 3;
+            PNT_W = 2;
+
+            for (int i = 0; i < player.played_e.size; i++)
+                played.keys[i] = player.played_e.keys[i];
+
+            break;
+        }
+
+        case 2:
+        {
+            allowed = 2;
+            banned = 1;
+            PNT = 15;
+            PNT_A = 7;
+            PNT_B = 5;
+            PNT_W = 4;
+
+            for (int i = 0; i < player.played_m.size; i++)
+                played.keys[i] = player.played_m.keys[i];
+
+            break;
+        }
+
+        case 3:
+        {
+            allowed = 3;
+            banned = 2;
+            PNT = 20;
+            PNT_A = 10;
+            PNT_B = 8;
+            PNT_W = 6;
+
+            for (int i = 0; i < player.played_h.size; i++)
+                played.keys[i] = player.played_h.keys[i];
+
+            break;
+        }
+    }
 }
 
 
