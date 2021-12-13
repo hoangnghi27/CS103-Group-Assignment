@@ -691,11 +691,51 @@ void Revealer()
 
 void AnswerResult()
 {
-    //
+        if (time_left > 0 && input == key) {
+            score += round_pnt;
+            cout << "Dap an cua ban chinh xac. Xin chuc mung ban" << endl;
+            cout << "Ban vua duoc cong them " << round_pnt << ", diem hien tai cua ban la " << score;
+        }
+        else {
+            score -= PNT_W;
+            if (time_left == 0)
+                cout << "Rat tiec ban khong hoan thanh duoc o chu";
+            if (input != key)
+                cout << "Dap an cua ban khong chinh xac, dap an dung la " << key << endl;
+            cout << "Ban vua bi tru di " << PNT_W << " diem, so diem hien tai cua ban la " << score;
+        }
+    
 }
 
 
 void SessionResult()
 {
-    //
+
+        UpdateScrbrdData();
+        int num_of_records = scrbrd.size;
+        PLAYER temp;
+        for (int i = 0; i < (scrbrd.size - 1); i++)
+        {
+            for (int j = i + 1; j < scrbrd.size; j++)
+            {
+                if (scrbrd.players[i].score > scrbrd.players[j].score)
+                {
+                    temp = scrbrd.players[i];
+
+                    scrbrd.players[i] = scrbrd.players[j];
+                    scrbrd.players[j] = temp;
+                }
+            }
+
+        }
+        int pos;
+        for (int i = 0; i < scrbrd.size - 1; i++) {
+            if (scrbrd.players[i].score == score)
+                pos = i + 1;
+        }
+
+
+        cout << "Tong diem cua ban la " << score << ", vi tri cua ban trong bang xep hang : " << pos << "/" << num_of_records << endl;
+        cout << "Chao ban, hen gap lan sau!";
+    
 }
