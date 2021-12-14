@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <direct.h>
+#include <stdlib.h>
 #include <fstream>
 #include <string>
 #include <cstring>
@@ -45,6 +46,7 @@ string dir_bank_e = working_path() + "\\saves\\banks\\de.txt",               // 
        dir_players_folder = working_path() + "\\saves\\players\\",           // Folder dữ liệu người chơi
 
        name,                                                // Tên người chơi
+       psswd,                                               // Mật khẩu người chơi
        key,                                                 // Từ khóa được chọn
        input;                                               // Kết quả người chơi nhập vào
 
@@ -76,10 +78,15 @@ string revealed[30];                                        // Các kí tự đ�
 int revealed_pos[30];                                       // Các vị trí đã được mở
 
 
-void ReadKeys(), ReadScrbrdData(), ReadPlayerData(string, PLAYER &),
+string Encryptor(string);
+
+bool ReadPlayerData(string);
+
+void ReadKeys(), ReadScrbrdData(),
      UpdateScrbrdData(), UpdatePlayerData(string), UpdateSessionVars(),
-     CreateNewPlayerDataFile(string), AddNewPlayer(PLAYER),
+     CreateNewPlayerDataFile(string), AddNewPlayer(PLAYER &, bool),
      AddPlayerToScrbrd(PLAYER), PrintScrbrd(bool), SortScrbrd(char),
+     PlayerSelector(bool),
     
      KeyPicker(), Printer(), Timer(),
     
@@ -101,14 +108,7 @@ int main()
 
 
     if (scrbrd.size == 0)
-    {
-        cout << endl << endl << "Vui long nhap ten cua ban (co phan biet hoa/thuong): ";
-        getline(cin, player.name);
-
-        AddNewPlayer(player);
-
-        cout << "Da luu du lieu cua nguoi choi " << player.name << endl;
-    }
+        AddNewPlayer(player, true);
 
     else
     {
@@ -124,23 +124,8 @@ int main()
 
         if (option == "y" || option == "Y")
         {
-            int id;
-
-            cout << endl << "===== Danh sach nguoi choi da luu =====" << endl;
-            PrintScrbrd(true);
-
-            cout << endl << endl << "Nhap so thu tu cua ban: ";
-            cin >> id;
-
-            while (id < 1 || scrbrd.size < id)
-            {
-                cout << "Khong hop le. Vui long nhap lai: ";
-                cin >> id;
-            }
-
-            ReadPlayerData(scrbrd.players[id - 1].name, player);
+            PlayerSelector(true);
             UpdateScrbrdData();
-            cout << "Da doc du lieu cua nguoi choi " << player.name << endl;
         }
 
         else
@@ -169,35 +154,73 @@ int main()
 
                     if (option == "y" || option == "Y")
                     {
+                        cin.clear(); cin.ignore();
+                        cout << "Mat khau (nhap 'quit' de thoat): ";
+                        getline(cin, psswd);
+
+                        if (psswd == "quit")
+                        {
+                            cout << endl << "Chao ban, hen gap lan sau!" << endl;
+                            exit(0);
+                        }
+
+                        while (ReadPlayerData(player.name) == false)
+                        {
+                            cout << endl << "Mat khau khong chinh xac" << endl << "Vui long nhap lai (nhap 'quit' de thoat): ";
+                            getline(cin, psswd);
+
+                            if (psswd == "quit")
+                            {
+                                cout << endl << "Chao ban, hen gap lan sau!" << endl;
+                                exit(0);
+                            }
+
+                        }
+
+                        cout << endl << "Mat khau chinh xac. ";
+
                         PLAYER temp;
                         temp.name = player.name;
                         player = temp;
 
                         scrbrd.size -= 1;
 
-                        AddNewPlayer(player);
+                        AddNewPlayer(player, false);
 
-                        cout << "Da luu moi du lieu cua nguoi choi " << player.name << endl;
+
+                        break;
                     }
 
                     else
                     {
-                        ReadPlayerData(player.name, player);
+                        cin.clear(); cin.ignore();
+                        cout << "Mat khau (nhap 'quit' de thoat): ";
+                        getline(cin, psswd);
+
+                        while (ReadPlayerData(player.name) == false)
+                        {
+                            cout << endl << "Mat khau khong chinh xac" << endl << "Vui long nhap lai (nhap 'quit' de thoat): ";
+                            getline(cin, psswd);
+
+                            if (psswd == "quit")
+                            {
+                                cout << endl << "Chao ban, hen gap lan sau!" << endl;
+                                exit(0);
+                            }
+
+                        }
+
                         UpdateScrbrdData();
 
-                        cout << "Da doc du lieu cua nguoi choi " << player.name << endl;
-                    }
+                        cout << endl << "Mat khau chinh xac. Du lieu cua nguoi choi " << player.name << " duoc doc thanh cong" << endl;
 
-                    break;
+                        break;
+                    }
                 }
             }
 
             if (existed == false)
-            {
-                AddNewPlayer(player);
-
-                cout << "Da luu du lieu cua nguoi choi " << player.name << endl;
-            }
+                AddNewPlayer(player, false);
         }
     }
 
@@ -219,6 +242,19 @@ int main()
 
 
 
+
+
+string Encryptor(string psswd)
+{
+    char key = 'X';
+    string output = psswd;
+
+    for (int i = 0; i < psswd.size(); i++)
+        output[i] = psswd[i] ^ key;
+
+
+    return output;
+}
 
 
 void ReadKeys()
@@ -380,18 +416,18 @@ void ReadScrbrdData()
         scrbrd.size = -1;
 }
 
-void ReadPlayerData(string name, PLAYER &target)
+bool ReadPlayerData(string name)
 {
-    target.name = name;
-
-    string dir = dir_players_folder + name + ".txt";
+    player.name = name;
 
     for (int i = 0; i < scrbrd.size; i++)
     {
         if (scrbrd.players[i].name == name)
-            target.score = scrbrd.players[i].score;
+            player.score = scrbrd.players[i].score;
     }
 
+
+    string dir = dir_players_folder + name + ".txt";
 
     reader.open(dir);
 
@@ -404,35 +440,27 @@ void ReadPlayerData(string name, PLAYER &target)
         {
             if (counter == 0)
             {
-                target.played_e.size = stoi(content);
-                counter++;
+                if (Encryptor(content) != psswd)
+                {
+                    reader.close();
+                    return false;
+                }
+                
+                else
+                    counter++;
             }
 
             else if (counter == 1)
             {
-                target.played_e.keys[elem_counter] = content;
-
-                if (elem_counter == target.played_e.size - 1)
-                {
-                    counter++;
-                    elem_counter = 0;
-                }
-
-                else elem_counter++;
+                player.played_e.size = stoi(content);
+                counter++;
             }
-
 
             else if (counter == 2)
             {
-                target.played_m.size = stoi(content);
-                counter++;
-            }
+                player.played_e.keys[elem_counter] = content;
 
-            else if (counter == 3)
-            {
-                target.played_m.keys[elem_counter] = content;
-
-                if (elem_counter == target.played_m.size - 1)
+                if (elem_counter == player.played_e.size - 1)
                 {
                     counter++;
                     elem_counter = 0;
@@ -442,17 +470,37 @@ void ReadPlayerData(string name, PLAYER &target)
             }
 
 
-            else if (counter == 4)
+            else if (counter == 3)
             {
-                target.played_h.size = stoi(content);
+                player.played_m.size = stoi(content);
                 counter++;
             }
 
+            else if (counter == 4)
+            {
+                player.played_m.keys[elem_counter] = content;
+
+                if (elem_counter == player.played_m.size - 1)
+                {
+                    counter++;
+                    elem_counter = 0;
+                }
+
+                else elem_counter++;
+            }
+
+
             else if (counter == 5)
             {
-                target.played_h.keys[elem_counter] = content;
+                player.played_h.size = stoi(content);
+                counter++;
+            }
 
-                if (elem_counter == target.played_h.size - 1)
+            else if (counter == 6)
+            {
+                player.played_h.keys[elem_counter] = content;
+
+                if (elem_counter == player.played_h.size - 1)
                     break;
 
                 else elem_counter++;
@@ -464,6 +512,9 @@ void ReadPlayerData(string name, PLAYER &target)
 
     else
         scrbrd.size = -1;
+    
+    
+    return true;
 }
 
 
@@ -486,8 +537,9 @@ void UpdatePlayerData(string name)
 {
     writer.open(dir_players_folder + player.name + ".txt");
 
-
-    writer << player.played_e.size;
+    writer << Encryptor(psswd);
+    
+    writer << "\n" << player.played_e.size;
 
     for (int i = 0; i < player.played_e.size; i++)
         writer << "\n" << player.played_e.keys[i];
@@ -576,11 +628,30 @@ void CreateNewPlayerDataFile(string name)
     UpdatePlayerData(new_player.name);
 }
 
-void AddNewPlayer(PLAYER player)
+void AddNewPlayer(PLAYER &player, bool ask_name)
 {
+    if (ask_name)
+    {
+        cout << endl << endl << "Vui long nhap ten cua ban (co phan biet hoa/thuong): ";
+        getline(cin, player.name);
+    }
+
+    cout << "Vui long tao mat khau (Luu y: Mat khau khi mat se khong the khoi phuc): ";
+    cin.clear();
+    getline(cin, psswd);
+
+    while (psswd == "quit")
+    {
+        cout << "Mat khau khong hop le. Vui long chon mat khau khac: ";
+        cin.clear();
+        getline(cin, psswd);
+    }
+
     CreateNewPlayerDataFile(player.name);
     AddPlayerToScrbrd(player);
     UpdateScrbrdData();
+
+    cout << "Da luu du lieu cua nguoi choi " << player.name << endl;
 }
 
 void AddPlayerToScrbrd(PLAYER player)
@@ -649,6 +720,68 @@ void SortScrbrd(char mode)
     }
 }
 
+
+void PlayerSelector(bool prompt)
+{
+    int id;
+
+    if (prompt)
+    {
+        cout << endl << "===== Danh sach nguoi choi da luu =====" << endl;
+        PrintScrbrd(true);
+    }
+
+    cout << endl << endl << "Nhap so thu tu cua ban (0 de thoat chuong trinh): ";
+    cin >> id;
+
+    while (id < 0 || scrbrd.size < id)
+    {
+        cout << "Khong hop le. Vui long nhap lai: ";
+        cin >> id;
+    }
+
+    if (id == 0)
+    {
+        cout << endl << "Chao ban, hen gap lan sau!" << endl;
+        exit(0);
+    }
+
+    cin.clear(); cin.ignore();
+    cout << endl << "Mat khau: ";
+    getline(cin, psswd);
+
+    while (ReadPlayerData(scrbrd.players[id - 1].name) == false)
+    {
+        cout << endl << "Mat khau khong chinh xac" << endl << "Vui long nhap lai hoac nhan Enter de chon nguoi choi khac: ";
+        getline(cin, psswd);
+
+        if (psswd == "")
+        {
+            cout << endl << endl << "Nhap so thu tu cua ban (0 de thoat chuong trinh): ";
+            cin >> id;
+
+            while (id < 0 || scrbrd.size < id)
+            {
+                cout << "Khong hop le. Vui long nhap lai: ";
+                cin >> id;
+            }
+
+            if (id == 0)
+            {
+                cout << endl << "Chao ban, hen gap lan sau!" << endl;
+                exit(0);
+            }
+
+
+            cin.clear(); cin.ignore();
+            cout << endl << "Mat khau: ";
+            getline(cin, psswd);
+            continue;
+        }
+    }
+
+    cout << endl << "Mat khau chinh xac. Du lieu cua nguoi choi " << player.name << " duoc doc thanh cong" << endl;
+}
 
 
 
@@ -730,5 +863,7 @@ void SessionResult()
     }
 
     cout << "Tong diem cua ban la " << score << ", vi tri cua ban trong bang xep hang : " << pos + 1 << "/" << scrbrd.size << endl;
-    cout << "Chao ban, hen gap lan sau!";
+    cout << endl << "Chao ban, hen gap lan sau!";
+
+    exit(0);
 }
