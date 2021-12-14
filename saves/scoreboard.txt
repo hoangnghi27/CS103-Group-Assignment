@@ -1,9 +1,5 @@
-4
-test 3
-750
+2
 test 2
 250
 test 1
-50
-tessst 4
 50
