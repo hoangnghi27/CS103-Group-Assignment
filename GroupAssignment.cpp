@@ -99,6 +99,7 @@ int main()
 {
     ReadKeys();
     ReadScrbrdData();
+    SortScrbrd('d');
 
     cout << endl << "=============================================================";
     cout << endl << "|| CHAO MUNG BAN DEN VOI GAME MYWORDS (BY ITEC DEVELOPERS) ||";
@@ -246,12 +247,19 @@ int main()
 
 string Encryptor(string psswd)
 {
-    char key = 'X';
+    char key[3] = {'X', 'Y', 'Z'};
+    int j = 0;
+
     string output = psswd;
 
     for (int i = 0; i < psswd.size(); i++)
-        output[i] = psswd[i] ^ key;
+    {
+        output[i] = psswd[i] ^ key[j];
 
+        j++;
+        if (j == 3)
+            j = 0;
+    }
 
     return output;
 }
